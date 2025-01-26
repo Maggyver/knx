@@ -1093,7 +1093,9 @@ int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_
         case 1:
         {
             struct tm tmp = value;
-            unsigned8ToPayload(payload, payload_length, 0, tmp.tm_hour, 0x1F);
+            int8_t val = (tmp.tm_wday + 1) << 5;
+            val = val + (tmp.tm_hour & 0b00011111);
+            unsigned8ToPayload(payload, payload_length, 0, val, 0xFF);
             unsigned8ToPayload(payload, payload_length, 1, tmp.tm_min, 0x3F);
             unsigned8ToPayload(payload, payload_length, 2, tmp.tm_sec, 0x3F);
             break;
