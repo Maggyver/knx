@@ -6,6 +6,10 @@
 #include <SPI.h>
 #endif
 
+#ifndef KNX_UART_BAUDRATE
+#define KNX_UART_BAUDRATE 19200
+#endif
+
 #ifndef KNX_NO_PRINT
 Stream* ArduinoPlatform::SerialDebug = &KNX_DEBUG_SERIAL;
 #endif
@@ -48,7 +52,7 @@ HardwareSerial* ArduinoPlatform::knxUart()
 
 void ArduinoPlatform::setupUart()
 {
-    _knxSerial->begin(19200, SERIAL_8E1);
+    _knxSerial->begin(KNX_UART_BAUDRATE, SERIAL_8E1);
     while (!_knxSerial) 
         ;
 }
