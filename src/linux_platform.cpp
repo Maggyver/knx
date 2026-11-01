@@ -450,10 +450,14 @@ void LinuxPlatform::closeUart()
     }
 }
 
+#ifndef KNX_UART_BAUDRATE
+#define KNX_UART_BAUDRATE 19200
+#endif
+
 void LinuxPlatform::setupUart()
 {
     /*
-    * 19200,8E1, no handshake
+    * 19200 or 38400,8E1, no handshake
     */
     struct termios options;    /* Schnittstellenoptionen */
 
@@ -472,8 +476,15 @@ void LinuxPlatform::setupUart()
         memset(&options, 0, sizeof(options)); /* Structur loeschen, ggf. vorher sichern
                                              und bei Programmende wieder restaurieren */
         /* Baudrate setzen */
-        cfsetispeed(&options, B19200);
-        cfsetospeed(&options, B19200);
+        #if KNX_UART_BAUDRATE == 19200
+            cfsetispeed(&options, B19200);
+            cfsetospeed(&options, B19200);
+        #elif KNX_UART_BAUDRATE == 38400
+            cfsetispeed(&options, B38400);
+            cfsetospeed(&options, B38400);
+        #else
+        #error "Unsupported KNX_UART_BAUDRATE"
+        #endif
 
         /* setze Optionen */
         options.c_cflag |= PARENB;          /* Enable Paritybit */
