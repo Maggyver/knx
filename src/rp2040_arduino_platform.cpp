@@ -49,6 +49,10 @@ A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 #define KNX_SERIAL Serial1
 #endif
 
+#ifndef KNX_UART_BAUDRATE
+#define KNX_UART_BAUDRATE 19200
+#endif
+
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
 #ifndef KNX_NO_DEFAULT_UART
     : ArduinoPlatform(&KNX_SERIAL)
@@ -74,7 +78,7 @@ void RP2040ArduinoPlatform::setupUart()
         serial->setPollingMode();
     }
 
-    _knxSerial->begin(19200, SERIAL_8E1);
+    _knxSerial->begin(KNX_UART_BAUDRATE, SERIAL_8E1);
     while (!_knxSerial) 
         ;
 }
