@@ -52,7 +52,13 @@ HardwareSerial* ArduinoPlatform::knxUart()
 
 void ArduinoPlatform::setupUart()
 {
-    _knxSerial->begin(KNX_UART_BAUDRATE, SERIAL_8E1);
+    #if KNX_UART_BAUDRATE == 19200
+        _knxSerial->begin(19200, SERIAL_8E1);
+    #elif KNX_UART_BAUDRATE == 38400
+        _knxSerial->begin(38400, SERIAL_8E1);
+    #else
+        #error "Unsupported KNX_UART_BAUDRATE"
+    #endif
     while (!_knxSerial) 
         ;
 }
